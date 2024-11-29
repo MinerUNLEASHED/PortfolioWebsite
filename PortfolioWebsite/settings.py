@@ -119,17 +119,22 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 
-# STATIC_URL = '/static/'
-# # STATICFILES_DIRS = [
-# #     os.path.join(BASE_DIR, "static")
-# # ]
-# STATIC_ROOT = os.path.join(BASE_DIR, "static")
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+# URL prefix for static files
+# STATIC_URL = '/static/'
+
+# Additional directories for static files (if you have other folders containing static files)
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "staticfiles"),  # Replace with a folder distinct from STATIC_ROOT
+# ]
+
+# Directory where collectstatic will place all static files (used in production)
+# STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 
 # Default primary key field type
