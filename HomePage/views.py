@@ -7,6 +7,6 @@ def homepage(request):
 
 
 def projects(request, id):
-    return render(request, f"Projects/project{id}-old.html")
+    return render(request, f"Projects/Project{id}-old.html")
 
 
