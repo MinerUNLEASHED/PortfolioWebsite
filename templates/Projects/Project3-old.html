@@ -250,21 +250,34 @@
   </section>
 
   <!-- Project Video Section -->
-{#  <section class="project-section" id="video">#}
-{#    <div class="container">#}
-{#      <h2>Video</h2>#}
-{#      <div class="row">#}
-{#        <div class="col-12">#}
-{#          <div class="video-container">#}
-{#            <video controls>#}
-{#              <source src="{% static 'proj1/proj1video.mp4' %}" type="video/mp4">#}
-{#              Your browser does not support the video tag.#}
-{#            </video>#}
-{#          </div>#}
-{#        </div>#}
-{#      </div>#}
-{#    </div>#}
-{#  </section>#}
+<section class="project-section" id="video">
+  <div class="container">
+    <h2>Video</h2>
+    <div class="row">
+      <!-- Left Video -->
+      <div class="col-md-6 text-center">
+        <div class="video-container">
+          <video controls>
+            <source src="https://f005.backblazeb2.com/file/PortfolioWebsite/static/proj3/facemask_before_video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <p>Before</p>
+      </div>
+      <!-- Right Video -->
+      <div class="col-md-6 text-center">
+        <div class="video-container">
+          <video controls>
+            <source src="https://f005.backblazeb2.com/file/PortfolioWebsite/static/proj3/facemask_after_video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <p>After</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 
   <!-- Footer -->
   <footer>
