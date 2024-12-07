@@ -1,4 +1,3 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -167,20 +166,57 @@
       background-color: #004e92;
     }
 
-    /* Video Container */
-    .video-container {
+    /* Video Compare Slider Styles */
+    .video-compare-container {
       position: relative;
-      padding-bottom: 56.25%; /* 16:9 aspect ratio */
-      height: 0;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
       overflow: hidden;
+      cursor: ew-resize;
     }
 
-    .video-container video {
+    .video-compare-container video {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
+      height: auto;
+    }
+
+    #beforeVideo {
+      clip-path: inset(0 50% 0 0);
+    }
+
+    /* Slider Line */
+    #slider {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 2px;
       height: 100%;
+      background: #ffcc00;
+      cursor: ew-resize;
+    }
+
+    /* Slider Handle */
+    #sliderHandle {
+      position: absolute;
+      top: 50%;
+      left: -10px;
+      width: 20px;
+      height: 20px;
+      background-color: #ffcc00;
+      border-radius: 50%;
+      transform: translateY(-50%);
+      cursor: ew-resize;
+    }
+
+    /* Maintain Aspect Ratio */
+    .video-compare-container::before {
+      content: "";
+      display: block;
+      padding-top: 56.25%; /* 16:9 Aspect Ratio */
     }
   </style>
 </head>
@@ -221,8 +257,6 @@
       <div class="project-header-content">
         <h1>AI-Powered Face Mask Detector</h1>
         <p>Leveraging advanced AI technology to accurately detect face mask compliance, promoting health and safety in real-time.</p>
-{#        <p>2023-2024 Science Fair</p>#}
-
       </div>
     </div>
   </div>
@@ -242,7 +276,6 @@
             This project emphasizes efficiency and reliability, making it a valuable tool for enforcing health and safety guidelines. With its powerful AI foundation and real-time capabilities, the Face Mask Detection AI contributes to creating safer, healthier environments during times when mask compliance is essential.<br><br>
             The project's codebase includes components for camera detection and automated alerting via text messages, ensuring timely notifications upon pollution detection.<br><br>
           </p>
-{#          <a href="https://worldfactbookanalyzer.pythonanywhere.com/" class="btn btn-primary" target="_blank">Visit Project Website</a>#}
           <a href="https://github.com/MinerUNLEASHED/FaceMaskObjectDetectionAI" class="btn btn-secondary" target="_blank">View On Github</a>
         </div>
       </div>
@@ -250,34 +283,32 @@
   </section>
 
   <!-- Project Video Section -->
-<section class="project-section" id="video">
-  <div class="container">
-    <h2>Video</h2>
-    <div class="row">
-      <!-- Left Video -->
-      <div class="col-md-6 text-center">
-        <div class="video-container">
-          <video controls>
-            <source src="https://f005.backblazeb2.com/file/PortfolioWebsite/static/proj3/facemask_before_video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
+  <section class="project-section" id="video">
+    <div class="container">
+      <h2>Video</h2>
+      <div class="row">
+        <div class="col-12 text-center">
+          <div class="video-compare-container" id="videoCompareContainer">
+            <!-- After Video -->
+            <video id="afterVideo" muted loop playsinline>
+              <source src="https://f005.backblazeb2.com/file/PortfolioWebsite/static/proj3/facemask_after_video.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <!-- Before Video -->
+            <video id="beforeVideo" muted loop playsinline>
+              <source src="https://f005.backblazeb2.com/file/PortfolioWebsite/static/proj3/facemask_before_video.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <!-- Slider -->
+            <div id="slider">
+              <div id="sliderHandle"></div>
+            </div>
+          </div>
+          <p>Drag the slider to compare Before and After</p>
         </div>
-        <p>Before</p>
-      </div>
-      <!-- Right Video -->
-      <div class="col-md-6 text-center">
-        <div class="video-container">
-          <video controls>
-            <source src="https://f005.backblazeb2.com/file/PortfolioWebsite/static/proj3/facemask_after_video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        <p>After</p>
       </div>
     </div>
-  </div>
-</section>
-
+  </section>
 
   <!-- Footer -->
   <footer>
@@ -328,6 +359,78 @@
 
       sections.forEach(section => {
         observer.observe(section);
+      });
+    });
+
+    // Video Compare Slider
+    document.addEventListener('DOMContentLoaded', function () {
+      var afterVideo = document.getElementById('afterVideo');
+      var beforeVideo = document.getElementById('beforeVideo');
+      var slider = document.getElementById('slider');
+      var sliderHandle = document.getElementById('sliderHandle');
+      var container = document.getElementById('videoCompareContainer');
+      var dragging = false;
+
+      // Synchronize video playback
+      function syncVideos() {
+        if (!afterVideo.paused) {
+          beforeVideo.currentTime = afterVideo.currentTime;
+        }
+      }
+
+      afterVideo.addEventListener('play', function() {
+        beforeVideo.play();
+      });
+
+      afterVideo.addEventListener('pause', function() {
+        beforeVideo.pause();
+      });
+
+      afterVideo.addEventListener('timeupdate', syncVideos);
+
+      // Start videos
+      afterVideo.play();
+      beforeVideo.play();
+
+      // Mouse events
+      slider.addEventListener('mousedown', function(e) {
+        dragging = true;
+      });
+
+      document.addEventListener('mouseup', function(e) {
+        dragging = false;
+      });
+
+      document.addEventListener('mousemove', function(e) {
+        if (!dragging) return;
+        var rect = container.getBoundingClientRect();
+        var offsetX = e.clientX - rect.left;
+        var percent = offsetX / rect.width * 100;
+        if (percent < 0) percent = 0;
+        if (percent > 100) percent = 100;
+        slider.style.left = percent + '%';
+        beforeVideo.style.clipPath = 'inset(0 ' + (100 - percent) + '% 0 0)';
+      });
+
+      // Touch events for mobile devices
+      slider.addEventListener('touchstart', function(e) {
+        dragging = true;
+      });
+
+      document.addEventListener('touchend', function(e) {
+        dragging = false;
+      });
+
+      document.addEventListener('touchmove', function(e) {
+        if (!dragging) return;
+        var touch = e.touches[0];
+        var rect = container.getBoundingClientRect();
+        var offsetX = touch.clientX - rect.left;
+        var percent = offsetX / rect.width * 100;
+        if (percent < 0) percent = 0;
+        if (percent > 100) percent = 100;
+        slider.style.left = percent + '%';
+        beforeVideo.style.clipPath = 'inset(0 ' + (100 - percent) + '% 0 0)';
       });
     });
   </script>
